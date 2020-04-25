@@ -1,5 +1,7 @@
 APP_LIVE = False
 
+DEVICE = ''
+
 LIVE_HTTP_URI = ''
 BUILD_HTTP_URI = ''
 
