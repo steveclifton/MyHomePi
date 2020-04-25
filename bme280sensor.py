@@ -3,6 +3,7 @@ import smbus
 import sys
 import time
 import env
+import datetime
 from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
@@ -144,13 +145,16 @@ def readBME280All(addr=DEVICE):
 # Collect and store the data
 def collectSensorData(db):
 
+    currentDT = datetime.datetime.now()
+    dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
+
     try:
         temperature,pressure,humidity = readBME280All()
-        db.execute("INSERT INTO bme280 (temperature, humidity, pressure) VALUES({0:0.1f},{1:0.1f},{2:0.1f})".format(temperature, humidity, pressure))
+        db.execute("INSERT INTO bme280 (temperature, humidity, pressure, created) VALUES({0:0.1f},{1:0.1f},{2:0.1f}, ?)".format(temperature, humidity, pressure), [dateTime])
 
     except Exception as e:
         errorMsg = str(e)
-        db.execute("INSERT INTO errorlogs (log) VALUES(?)", (errorMsg,))
+        db.execute("INSERT INTO errorlogs (log, created) VALUES(?, ?)", [errorMsg, dateTime])
 
     return True;
 

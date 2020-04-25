@@ -1,5 +1,6 @@
 import requests
 import env
+import datetime
 
 def exportSensorData(db):
 
@@ -38,19 +39,21 @@ def exportSensorData(db):
 		headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/json'}
 	)
 
+	currentDT = datetime.datetime.now()
+	dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
 
 	# Check we have a successful post
 	if response.status_code == 200:
 		for recordId in uploadIds:
-			cur.execute('UPDATE bme280 SET exported = 1 WHERE id = ?', (recordId,))
+			cur.execute('UPDATE bme280 SET exported = 1 WHERE id = ?', [recordId])
 		return True
 
 	# Token has expirted, do something
 	elif response.status_code == 401 or response.status_code == 429:
 		errorMsg = response.json().get('message')
-		cur.execute("INSERT INTO errorlogs (log) VALUES(?)", [errorMsg])
+		cur.execute("INSERT INTO errorlogs (log, created) VALUES(?, ?)", [errorMsg, dateTime])
 		return False
 
 
-	cur.execute("INSERT INTO errorlogs (log) VALUES(?)", (str(response.text)))
+	cur.execute("INSERT INTO errorlogs (log, created) VALUES(?, ?)", [str(response.text), dateTime])
 	return False;

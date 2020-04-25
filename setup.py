@@ -10,13 +10,13 @@ try:
            temperature REAL NOT NULL,
            humidity REAL NOT NULL,
            pressure REAL NOT NULL,
-           created TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+           created TIMESTAMP NOT NULL,
            exported INT DEFAULT 0);''')
 
     db.execute('''CREATE TABLE IF NOT EXISTS errorlogs
            (ID INTEGER PRIMARY KEY AUTOINCREMENT,
            log TEXT NOT NULL,
-           created TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+           created TIMESTAMP NOT NULL,
            exported INT DEFAULT 0);''')
 
 except Exception as e:
