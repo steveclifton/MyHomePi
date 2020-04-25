@@ -9,9 +9,13 @@ def exportSensorData(db):
 	rows = cur.fetchall()
 
 	uploadData = []
+	uploadIds = []
 	for row in rows:
+
+		# Add the record id
+		uploadIds.append(row[0])
+
 		data = {
-			'id' : row[0],
 			'temperature' : row[1],
 			'humidity' : row[2],
 			'pressure' : row[3],
@@ -34,19 +38,19 @@ def exportSensorData(db):
 		headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/json'}
 	)
 
+
 	# Check we have a successful post
 	if response.status_code == 200:
-		for dataVal in uploadData:
-			cur.execute('UPDATE bme280 SET exported = 1 WHERE id = ?', (dataVal.get('id'),))
+		for recordId in uploadIds:
+			cur.execute('UPDATE bme280 SET exported = 1 WHERE id = ?', (recordId,))
 		return True
 
 	# Token has expirted, do something
-	elif response.status_code == 401:
+	elif response.status_code == 401 or response.status_code == 429:
 		errorMsg = response.json().get('message')
-        cur.execute("INSERT INTO errorlogs (log) VALUES(?)", (errorMsg,))
-        return False
+		cur.execute("INSERT INTO errorlogs (log) VALUES(?)", [errorMsg])
+		return False
 
 
-	cur.execute("INSERT INTO errorlogs (log) VALUES(?)", (response.text,))
+	cur.execute("INSERT INTO errorlogs (log) VALUES(?)", (str(response.text)))
 	return False;
-
