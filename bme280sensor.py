@@ -150,7 +150,7 @@ def collectSensorData(db):
 
     try:
         temperature,pressure,humidity = readBME280All()
-        db.execute("INSERT INTO bme280 (temperature, humidity, pressure, created) VALUES({0:0.1f},{1:0.1f},{2:0.1f}, ?)".format(temperature, humidity, pressure), [dateTime])
+        db.execute("INSERT INTO bme280 (temperature, humidity, pressure, created) VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?)".format(temperature, humidity, pressure), [dateTime])
 
     except Exception as e:
         errorMsg = str(e)
