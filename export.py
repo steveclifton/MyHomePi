@@ -13,9 +13,6 @@ def exportSensorData(db):
 	uploadIds = []
 	for row in rows:
 
-		if env.APP_LIVE == False:
-			print(row)
-
 		# Add the record id
 		uploadIds.append(row[0])
 
@@ -27,6 +24,9 @@ def exportSensorData(db):
 			'created' : row[4],
 		}
 		uploadData.append(data)
+
+	if env.APP_LIVE == False:
+		print(uploadData)
 
 	# Make sure we have something to send
 	if len(uploadData) <= 0:
