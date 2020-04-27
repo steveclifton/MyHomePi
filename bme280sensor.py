@@ -157,7 +157,7 @@ def collectSensorData(db):
         device = int(deviceid)
 
         try:
-            temperature,pressure,humidity = readBME280All(device)
+            temperature,pressure,humidity = readBME280All( int(device, 16) ) # Base16
 
             query = """INSERT INTO bme280 (temperature, humidity, pressure, deviceid, created)
                         VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?, ?)""".format(temperature, humidity, pressure)
