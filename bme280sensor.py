@@ -153,20 +153,17 @@ def collectSensorData(db):
 
     for deviceid, name in devices.items():
 
-        # Reformat to be an int
-        device = int(deviceid)
-
         try:
-            temperature,pressure,humidity = readBME280All( int(device, 16) ) # Base16
+            temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
 
             query = """INSERT INTO bme280 (temperature, humidity, pressure, deviceid, created)
                         VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?, ?)""".format(temperature, humidity, pressure)
 
-            db.execute(query, [device, dateTime])
+            db.execute(query, [ int(deviceid) , dateTime])
 
         except Exception as e:
             errorMsg = str(e)
-            db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, device, dateTime])
+            db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
 
 
     return True;
