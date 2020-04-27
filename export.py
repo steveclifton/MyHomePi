@@ -25,9 +25,6 @@ def exportSensorData(db):
 		}
 		uploadData.append(data)
 
-	if env.APP_LIVE == False:
-		print(uploadData)
-
 	# Make sure we have something to send
 	if len(uploadData) <= 0:
 		print('Nothing to do')
