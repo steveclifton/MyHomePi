@@ -8,8 +8,6 @@ from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
 
-DEVICE = int(str(env.DEVICE),16)
-
 bus = smbus.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
                      # Rev 1 Pi uses bus 0
 
@@ -21,7 +19,7 @@ def getUShort(data, index):
     # return two bytes from data as an unsigned 16-bit value
     return (data[index+1] << 8) + data[index]
 
-def getChar(data,index):
+def getChar(data, index):
     # return one byte from data as a signed char
     result = data[index]
     if result > 127:
@@ -29,18 +27,18 @@ def getChar(data,index):
 
     return result
 
-def getUChar(data,index):
+def getUChar(data, index):
     # return one byte from data as an unsigned char
     result =  data[index] & 0xFF
     return result
 
-def readBME280ID(addr=DEVICE):
+def readBME280ID(addr):
     # Chip ID Register Address
     REG_ID     = 0xD0
     (chip_id, chip_version) = bus.read_i2c_block_data(addr, REG_ID, 2)
     return (chip_id, chip_version)
 
-def readBME280All(addr=DEVICE):
+def readBME280All(addr):
     # Register Addresses
     REG_DATA = 0xF7
     REG_CONTROL = 0xF4
@@ -148,13 +146,25 @@ def collectSensorData(db):
     currentDT = datetime.datetime.now()
     dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
 
-    try:
-        temperature,pressure,humidity = readBME280All()
-        db.execute("INSERT INTO bme280 (temperature, humidity, pressure, created) VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?)".format(temperature, humidity, pressure), [dateTime])
+    if env.APP_LIVE:
+        devices = env.LIVE_BME280_DEVICES
+    else:
+        devices = env.BUILD_BME280_DEVICES
 
-    except Exception as e:
-        errorMsg = str(e)
-        db.execute("INSERT INTO errorlogs (log, created) VALUES(?, ?)", [errorMsg, dateTime])
+    for deviceid, name in devices.items():
+
+        try:
+            temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
+
+            query = """INSERT INTO bme280 (temperature, humidity, pressure, deviceid, created)
+                        VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?, ?)""".format(temperature, humidity, pressure)
+
+            db.execute(query, [ int(deviceid) , dateTime])
+
+        except Exception as e:
+            errorMsg = str(e)
+            db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+
 
     return True;
 
