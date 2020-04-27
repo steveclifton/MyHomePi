@@ -20,6 +20,7 @@ def exportSensorData(db):
 			'temperature' : row[1],
 			'humidity' : row[2],
 			'pressure' : row[3],
+			'deviceid' : row[7],
 			'created' : row[4],
 		}
 		uploadData.append(data)
