@@ -13,7 +13,7 @@ def exportSensorData(db):
 	uploadIds = []
 	for row in rows:
 
-		if APP_LIVE == False:
+		if env.APP_LIVE == False:
 			print(row)
 
 		# Add the record id
