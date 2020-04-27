@@ -21,6 +21,14 @@ try:
            created TIMESTAMP NOT NULL,
            exported INT DEFAULT 0);''')
 
+    db.execute('''ALTER TABLE bme280
+      ADD deviceid INTEGER NOT NULL
+      ''')
+
+    db.execute('''ALTER TABLE errorlogs
+      ADD deviceid INTEGER NOT NULL
+      ''')
+
 except Exception as e:
     print(e)
     returnStatus = False
