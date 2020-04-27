@@ -22,11 +22,11 @@ try:
            exported INT DEFAULT 0);''')
 
     db.execute('''ALTER TABLE bme280
-      ADD deviceid INTEGER NOT NULL
+      ADD deviceid INTEGER NOT NULL DEFAULT 0
       ''')
 
     db.execute('''ALTER TABLE errorlogs
-      ADD deviceid INTEGER NOT NULL
+      ADD deviceid INTEGER NOT NULL DEFAULT 0
       ''')
 
 except Exception as e:
