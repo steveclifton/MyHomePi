@@ -2,8 +2,8 @@ import env
 from database import Database
 
 # First create the database records
-database = Database()
-db = database.getDatabase()
+db_obj = Database()
+db = db_obj.getDatabase()
 
 try:
     db.execute('''

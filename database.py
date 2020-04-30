@@ -10,7 +10,7 @@ class Database:
 		else:
 			self.db = sqlite3.connect(env.BUILD_DATABASE)
 
-	def getDatabase():
+	def getDatabase(self):
 		return self.db
 
 
