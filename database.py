@@ -23,15 +23,15 @@ class Database:
 		currentDT = datetime.datetime.now()
 		dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
 
-	    try:
+		try:
 			query = "INSERT INTO `{table}` ({col}, deviceid, created) VALUES({val:0.2f}, ?, ?)".format(table=table, col=table, val=reading)
 			db.execute(query, [ int(deviceid) , dateTime])
 
-	    except Exception as e:
-	        errorMsg = str(e)
-	        db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+		except Exception as e:
+			errorMsg = str(e)
+			db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
 
-        return True
+		return True
 
 
 
