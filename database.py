@@ -1,11 +1,6 @@
 import sqlite3
 import env
 
-def getDatabase():
-	if env.APP_LIVE:
-		return sqlite3.connect(env.LIVE_DATABASE)
-	else:
-		return sqlite3.connect(env.BUILD_DATABASE)
 
 
 class Database:
@@ -16,6 +11,13 @@ class Database:
 			self.db = sqlite3.connect(env.LIVE_DATABASE)
 		else:
 			self.db = sqlite3.connect(env.BUILD_DATABASE)
+
+	def getDatabase():
+		if env.APP_LIVE:
+		return sqlite3.connect(env.LIVE_DATABASE)
+	else:
+		return sqlite3.connect(env.BUILD_DATABASE)
+
 
 	# Map of values to add
 	def logReading(self, table, deviceid, reading):

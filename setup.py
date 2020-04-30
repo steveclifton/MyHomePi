@@ -2,6 +2,7 @@ import env
 import database
 
 # First create the database records
+database = Database()
 db = database.getDatabase()
 
 try:
