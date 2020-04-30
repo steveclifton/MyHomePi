@@ -1,5 +1,5 @@
 import env
-import database
+from database import Database
 
 # First create the database records
 database = Database()

@@ -1,8 +1,6 @@
 import sqlite3
 import env
 
-
-
 class Database:
 
 	def __INIT__(self):
