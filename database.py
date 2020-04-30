@@ -15,8 +15,8 @@ class Database:
 	def getDatabase():
 		if env.APP_LIVE:
 			return sqlite3.connect(env.LIVE_DATABASE)
-	else:
-		return sqlite3.connect(env.BUILD_DATABASE)
+		else:
+			return sqlite3.connect(env.BUILD_DATABASE)
 
 
 	# Map of values to add
