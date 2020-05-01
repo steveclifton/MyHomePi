@@ -174,6 +174,7 @@ def collectBME280SensorData(db):
                 db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
                 db.commit()
             # Sleep for 2s to allow the sensor to regenerate data
+            print('Sleeping for two BME280')
             time.sleep(2);
         # endfor
 
