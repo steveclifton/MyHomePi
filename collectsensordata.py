@@ -1,10 +1,12 @@
 from database import getDatabase
-from bme280sensor import collectSensorData
+from sensor_bme280 import collectSensorData
 
 # Program start
 db = getDatabase()
 
-collectSensorData(db)
+collectBME280SensorData(db)
+
+collectDHT22SensorData(db)
 
 db.commit()
 db.close()
