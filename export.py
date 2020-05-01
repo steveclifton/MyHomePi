@@ -48,7 +48,7 @@ def exportSensorData(db):
 	# Check we have a successful post
 	if response.status_code == 200:
 		for recordId in uploadIds:
-			cur.execute('UPDATE reading SET exported = 1 WHERE id = ?', [recordId])
+			cur.execute('UPDATE readings SET exported = 1 WHERE id = ?', [recordId])
 		return True
 
 	# Token has expirted, do something
