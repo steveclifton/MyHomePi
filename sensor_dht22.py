@@ -22,11 +22,11 @@ def collectDHT22SensorData(db):
 			    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, int( deviceid ))
 
 			    if humidity is not None and temperature is not None:
-			        query = "INSERT INTO readings (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
+			        query = "INSERT INTO readings (key, value, deviceid, created) VALUES('temperature', {0:0.2f}, ?, ?)".format(temperature)
 			        db.execute(query, [ int(deviceid) , dateTime])
 			        db.commit()
 
-			        query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
+			        query = "INSERT INTO readings (key, value, deviceid, created) VALUES('humidity', {0:0.2f}, ?, ?)".format(humidity)
 			        db.execute(query, [ int(deviceid) , dateTime])
 			        db.commit()
 

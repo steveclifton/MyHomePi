@@ -158,13 +158,13 @@ def collectBME280SensorData(db):
             try:
                 temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
 
-                query = "INSERT INTO readings (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('temperature', {0:0.2f}, ?, ?)".format(temperature)
                 db.execute(query, [ int(deviceid) , dateTime])
 
-                query = "INSERT INTO readings (pressure, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(pressure)
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('pressure', {0:0.2f}, ?, ?)".format(pressure)
                 db.execute(query, [ int(deviceid) , dateTime])
 
-                query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('humidity', {0:0.2f}, ?, ?)".format(humidity)
                 db.execute(query, [ int(deviceid) , dateTime])
                 db.commit()
 
