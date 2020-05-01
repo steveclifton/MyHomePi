@@ -18,20 +18,28 @@ def collectDHT22SensorData(db):
 	for deviceid, name in devices.items():
 
 		for x in range(5):
-		    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, int( deviceid ))
 
-		    if humidity is not None and temperature is not None:
-		        query = "INSERT INTO reading (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
-		        db.execute(query, [ int(deviceid) , dateTime])
-		        db.commit()
-		        query = "INSERT INTO reading (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
-		        db.execute(query, [ int(deviceid) , dateTime])
-		        db.commit()
-		    else:
-		        pass
+			try:
+			    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, int( deviceid ))
 
+			    if humidity is not None and temperature is not None:
+			        query = "INSERT INTO readings (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
+			        db.execute(query, [ int(deviceid) , dateTime])
+			        db.commit()
+			        query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
+			        db.execute(query, [ int(deviceid) , dateTime])
+			        db.commit()
+			    else:
+			        pass
+	        except Exception as e:
+	        	errorMsg = str(e)
+	        	db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+	        	db.commit()
+
+        	# Sleep for 2s to allow the sensor to regenerate data
 		    time.sleep(2);
-	    #endif
-	#endif
+	    #end for
 
-# End Function
+	#end for
+
+#end Function
