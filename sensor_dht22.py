@@ -18,7 +18,7 @@ def collectDHT22SensorData(db):
 	for deviceid, name in devices.items():
 
 		for x in range(5):
-		    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, deviceid)
+		    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, int( deviceid ))
 
 		    if humidity is not None and temperature is not None:
 		        query = "INSERT INTO reading (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
