@@ -167,7 +167,8 @@ def collectBME280SensorData(db):
                 query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
                 db.execute(query, [ int(deviceid) , dateTime])
                 db.commit()
-                break
+
+                return True
 
             except Exception as e:
                 errorMsg = str(e)

@@ -25,10 +25,12 @@ def collectDHT22SensorData(db):
 			        query = "INSERT INTO readings (temperature, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(temperature)
 			        db.execute(query, [ int(deviceid) , dateTime])
 			        db.commit()
+
 			        query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
 			        db.execute(query, [ int(deviceid) , dateTime])
 			        db.commit()
-			        break
+
+			        return True
 
 			except Exception as e:
 				errorMsg = str(e)
