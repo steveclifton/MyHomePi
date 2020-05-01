@@ -15,7 +15,7 @@ def collectDHT22SensorData(db):
 	else:
 	    devices = env.BUILD_DHT22_DEVICES
 
-	for deviceid, name in devices.items():
+	for deviceid, externalId in devices.items():
 
 		for x in range(5):
 			try:
@@ -23,11 +23,11 @@ def collectDHT22SensorData(db):
 
 			    if humidity is not None and temperature is not None:
 			        query = "INSERT INTO readings (key, value, deviceid, created) VALUES('temperature', {0:0.2f}, ?, ?)".format(temperature)
-			        db.execute(query, [ int(deviceid) , dateTime])
+			        db.execute(query, [ int(externalId) , dateTime])
 			        db.commit()
 
 			        query = "INSERT INTO readings (key, value, deviceid, created) VALUES('humidity', {0:0.2f}, ?, ?)".format(humidity)
-			        db.execute(query, [ int(deviceid) , dateTime])
+			        db.execute(query, [ int(externalId) , dateTime])
 			        db.commit()
 
 			        return True

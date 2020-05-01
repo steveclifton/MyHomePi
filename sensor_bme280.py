@@ -151,7 +151,7 @@ def collectBME280SensorData(db):
     else:
         devices = env.BUILD_BME280_DEVICES
 
-    for deviceid, name in devices.items():
+    for deviceid, externalId in devices.items():
 
         # Try 5 times, in case sensor is offline
         for x in range(5):
@@ -159,13 +159,13 @@ def collectBME280SensorData(db):
                 temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
 
                 query = "INSERT INTO readings (key, value, deviceid, created) VALUES('temperature', {0:0.2f}, ?, ?)".format(temperature)
-                db.execute(query, [ int(deviceid) , dateTime])
+                db.execute(query, [ int(externalId) , dateTime])
 
                 query = "INSERT INTO readings (key, value, deviceid, created) VALUES('pressure', {0:0.2f}, ?, ?)".format(pressure)
-                db.execute(query, [ int(deviceid) , dateTime])
+                db.execute(query, [ int(externalId) , dateTime])
 
                 query = "INSERT INTO readings (key, value, deviceid, created) VALUES('humidity', {0:0.2f}, ?, ?)".format(humidity)
-                db.execute(query, [ int(deviceid) , dateTime])
+                db.execute(query, [ int(externalId) , dateTime])
                 db.commit()
 
                 return True
