@@ -11,9 +11,9 @@ def collectDHT22SensorData(db):
 	dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
 
 	if env.APP_LIVE:
-	    devices = env.LIVE_BME280_DEVICES
+	    devices = env.LIVE_DHT22_DEVICES
 	else:
-	    devices = env.BUILD_BME280_DEVICES
+	    devices = env.BUILD_DHT22_DEVICES
 
 	for deviceid, name in devices.items():
 
