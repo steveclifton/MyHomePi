@@ -141,7 +141,7 @@ def readBME280All(addr):
     return temperature/100.0,pressure/100.0,humidity
 
 # Collect and store the data
-def collectSensorData(db):
+def collectBME280SensorData(db):
 
     currentDT = datetime.datetime.now()
     dateTime = currentDT.strftime("%Y-%m-%d %H:%M:%S")
@@ -151,20 +151,34 @@ def collectSensorData(db):
     else:
         devices = env.BUILD_BME280_DEVICES
 
-    for deviceid, name in devices.items():
+    for deviceid, externalId in devices.items():
 
-        try:
-            temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
+        # Try 5 times, in case sensor is offline
+        for x in range(5):
+            try:
+                temperature,pressure,humidity = readBME280All( int(deviceid, 16) ) # Base16
 
-            query = """INSERT INTO bme280 (temperature, humidity, pressure, deviceid, created)
-                        VALUES({0:0.2f},{1:0.2f},{2:0.2f}, ?, ?)""".format(temperature, humidity, pressure)
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('temperature', {0:0.2f}, ?, ?)".format(temperature)
+                db.execute(query, [ int(externalId) , dateTime])
 
-            db.execute(query, [ int(deviceid) , dateTime])
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('pressure', {0:0.2f}, ?, ?)".format(pressure)
+                db.execute(query, [ int(externalId) , dateTime])
 
-        except Exception as e:
-            errorMsg = str(e)
-            db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+                query = "INSERT INTO readings (key, value, deviceid, created) VALUES('humidity', {0:0.2f}, ?, ?)".format(humidity)
+                db.execute(query, [ int(externalId) , dateTime])
+                db.commit()
 
+                return True
 
+            except Exception as e:
+                errorMsg = str(e)
+                db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+                db.commit()
+            # Sleep for 2s to allow the sensor to regenerate data
+            print('Sleeping for two BME280')
+            time.sleep(2);
+        # endfor
+
+    # endfor
     return True;
 
