@@ -18,7 +18,6 @@ def collectDHT22SensorData(db):
 	for deviceid, name in devices.items():
 
 		for x in range(5):
-
 			try:
 			    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, int( deviceid ))
 
@@ -29,8 +28,8 @@ def collectDHT22SensorData(db):
 			        query = "INSERT INTO readings (humidity, deviceid, created) VALUES({0:0.2f}, ?, ?)".format(humidity)
 			        db.execute(query, [ int(deviceid) , dateTime])
 			        db.commit()
-			    else:
-			        pass
+			        break
+
 			except Exception as e:
 				errorMsg = str(e)
 				db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
