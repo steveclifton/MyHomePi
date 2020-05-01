@@ -24,6 +24,7 @@ def exportSensorData(db):
 			'deviceid' : row[3],
 			'created'  : row[4],
 		}
+
 		uploadData.append(data)
 
 	# Make sure we have something to send
