@@ -37,7 +37,7 @@ def collectDHT22SensorData(db):
 				db.commit()
 
         	# Sleep for 2s to allow the sensor to regenerate data
-		    time.sleep(2);
+			time.sleep(2);
 	    #end for
 
 	#end for
