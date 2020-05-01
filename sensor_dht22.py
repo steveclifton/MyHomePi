@@ -1,6 +1,7 @@
 import Adafruit_DHT
 import time
 import datetime
+import env
 
 DHT_SENSOR = Adafruit_DHT.DHT22
 
