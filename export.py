@@ -6,7 +6,7 @@ def exportSensorData(db):
 
 	cur = db.cursor()
 
-	cur.execute("SELECT * FROM bme280 WHERE exported = 0")
+	cur.execute("SELECT * FROM readings WHERE exported = 0")
 	rows = cur.fetchall()
 
 	uploadData = []
@@ -16,13 +16,15 @@ def exportSensorData(db):
 		# Add the record id
 		uploadIds.append(row[0])
 
+		# 1|temperature|22.14|76|2020-05-01 19:03:58|0
+
 		data = {
-			'temperature' : row[1],
-			'humidity' : row[2],
-			'pressure' : row[3],
-			'deviceid' : row[6],
-			'created' : row[4],
+			'key'      : row[1],
+			'value'    : row[2],
+			'deviceid' : row[3],
+			'created'  : row[4],
 		}
+
 		uploadData.append(data)
 
 	# Make sure we have something to send
@@ -46,7 +48,7 @@ def exportSensorData(db):
 	# Check we have a successful post
 	if response.status_code == 200:
 		for recordId in uploadIds:
-			cur.execute('UPDATE bme280 SET exported = 1 WHERE id = ?', [recordId])
+			cur.execute('UPDATE reading SET exported = 1 WHERE id = ?', [recordId])
 		return True
 
 	# Token has expirted, do something
