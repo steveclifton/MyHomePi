@@ -31,10 +31,10 @@ def collectDHT22SensorData(db):
 			        db.commit()
 			    else:
 			        pass
-	        except Exception as e:
-	        	errorMsg = str(e)
-	        	db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
-	        	db.commit()
+			except Exception as e:
+				errorMsg = str(e)
+				db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
+				db.commit()
 
         	# Sleep for 2s to allow the sensor to regenerate data
 		    time.sleep(2);
