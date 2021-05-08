@@ -172,8 +172,8 @@ def collectBME280SensorData(db):
 
             except Exception as e:
                 errorMsg = str(e)
-                db.execute("INSERT INTO errorlogs (log, deviceid, created) VALUES(?, ?, ?)", [errorMsg, int(deviceid), dateTime])
-                db.commit()
+                print("Error: " + errorMsg + "\n");
+                print("Device : " + deviceid);
             # Sleep for 2s to allow the sensor to regenerate data
             print('Sleeping for two BME280')
             time.sleep(2);
